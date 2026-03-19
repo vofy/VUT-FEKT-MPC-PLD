@@ -75,15 +75,14 @@ BEGIN
 
   debouncer_i : debouncer
   GENERIC MAP(
-    G_DEB_PERIOD    => G_DEB_PERIOD)
+    G_DEB_PERIOD    => G_DEB_PERIOD
+  )
   PORT MAP(
     CLK             => CLK,
     CE              => CE,
     BTN_IN          => btn_nm,
     BTN_OUT         => btn_deb
   );
-
-  BTN_DEBOUNCED <= btn_deb;
 
   --------------------------------------------------------------------------------
 

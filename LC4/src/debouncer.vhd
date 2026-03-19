@@ -11,19 +11,31 @@ ENTITY debouncer IS
     CLK                 : IN    STD_LOGIC;
     CE                  : IN    STD_LOGIC;
     BTN_IN              : IN    STD_LOGIC;
-    BTN_OUT             : OUT   STD_LOGIC
+    BTN_OUT             : OUT   STD_LOGIC := '0'
   );
 END ENTITY debouncer;
 ----------------------------------------------------------------------------------
 ARCHITECTURE Behavioral OF debouncer IS
 ----------------------------------------------------------------------------------
 
+SIGNAL sh_reg : STD_LOGIC_VECTOR(3 DOWNTO 0) := "0000";
 
 ----------------------------------------------------------------------------------
 BEGIN
 ----------------------------------------------------------------------------------
 
-
+PROCESS (CLK) BEGIN
+    IF rising_edge(CLK) THEN
+        IF CE = '1' THEN
+            sh_reg <= sh_reg (2 DOWNTO 0) & BTN_IN;
+            IF sh_reg = "1111" THEN
+                BTN_OUT <= '1';
+            ELSE
+                BTN_OUT <= '0';
+            END IF;
+        END IF;
+    END IF;
+END PROCESS;
 
 ----------------------------------------------------------------------------------
 END ARCHITECTURE Behavioral;

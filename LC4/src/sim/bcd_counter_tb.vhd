@@ -10,15 +10,15 @@ architecture Behavioral of bcd_counter_tb is
 
   COMPONENT bcd_counter
   PORT (
-    CLK                         : IN  STD_LOGIC;
-    CE_100HZ                    : IN  STD_LOGIC;
-    CNT_ENABLE                  : IN  STD_LOGIC;
-    DISP_ENABLE                 : IN  STD_LOGIC;
-    CNT_RESET                   : IN  STD_LOGIC;
-    CNT_0                       : OUT STD_LOGIC_VECTOR( 3 DOWNTO 0);
-    CNT_1                       : OUT STD_LOGIC_VECTOR( 3 DOWNTO 0);
-    CNT_2                       : OUT STD_LOGIC_VECTOR( 3 DOWNTO 0);
-    CNT_3                       : OUT STD_LOGIC_VECTOR( 3 DOWNTO 0)
+        CLK             : IN STD_LOGIC;
+        CE_100HZ        : IN STD_LOGIC;
+        CNT_ENABLE      : IN STD_LOGIC;
+        DISP_ENABLE     : IN STD_LOGIC;
+        CNT_RESET       : IN STD_LOGIC;
+        CNT_0           : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        CNT_1           : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        CNT_2           : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
+        CNT_3           : OUT STD_LOGIC_VECTOR(3 DOWNTO 0)
   );
   END COMPONENT bcd_counter;
 
@@ -47,10 +47,10 @@ architecture Behavioral of bcd_counter_tb is
   SIGNAL cnt_enable             : STD_LOGIC := '0';
   SIGNAL disp_enable            : STD_LOGIC := '0';
   SIGNAL cnt_reset              : STD_LOGIC := '0';
-  SIGNAL cnt_0                  : STD_LOGIC_VECTOR( 3 DOWNTO 0);
-  SIGNAL cnt_1                  : STD_LOGIC_VECTOR( 3 DOWNTO 0);
-  SIGNAL cnt_2                  : STD_LOGIC_VECTOR( 3 DOWNTO 0);
-  SIGNAL cnt_3                  : STD_LOGIC_VECTOR( 3 DOWNTO 0);
+  SIGNAL cnt_0                  : STD_LOGIC_VECTOR(3 DOWNTO 0);
+  SIGNAL cnt_1                  : STD_LOGIC_VECTOR(3 DOWNTO 0);
+  SIGNAL cnt_2                  : STD_LOGIC_VECTOR(3 DOWNTO 0);
+  SIGNAL cnt_3                  : STD_LOGIC_VECTOR(3 DOWNTO 0);
 
 ----------------------------------------------------------------------------------
 BEGIN
@@ -109,15 +109,38 @@ BEGIN
     ------------------------------------------------------------------------------
     -- place your own stimuli below
     ------------------------------------------------------------------------------
+    
+    -- Enable counter and display early (important for CE overlap)
+    WAIT FOR C_CLK_PERIOD * 2;
+    cnt_enable  <= '1';
+    disp_enable <= '1';
 
+    -- Let CE generator start producing pulses
+    WAIT FOR C_CLK_PERIOD * 20;
 
+    -- Apply reset while system is running
+    cnt_reset <= '1';
+    WAIT FOR C_CLK_PERIOD * 2;
+    cnt_reset <= '0';
 
+    -- Let counter run
+    WAIT FOR C_CLK_PERIOD * 200;
 
+    -- Disable counter
+    cnt_enable <= '0';
+    WAIT FOR C_CLK_PERIOD * 200;
 
+    -- Re-enable counter
+    cnt_enable <= '1';
+    WAIT FOR C_CLK_PERIOD * 200;
 
+    -- Reset
+    cnt_reset <= '1';
+    WAIT FOR C_CLK_PERIOD * 2;
+    cnt_reset <= '0';
 
-
-
+    WAIT FOR C_CLK_PERIOD * 200;
+    
     ------------------------------------------------------------------------------
     -- end of simulation
     ------------------------------------------------------------------------------
