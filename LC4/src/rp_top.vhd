@@ -4,15 +4,15 @@ use IEEE.STD_LOGIC_1164.ALL;
 ----------------------------------------------------------------------------------
 ENTITY rp_top IS
   GENERIC(
-    G_DEB_PERIOD        : POSITIVE := 3
+    G_DEB_PERIOD        : POSITIVE := 500000
   );
   PORT(
-    CLK                 : IN  STD_LOGIC;
-    BTN                 : IN  STD_LOGIC_VECTOR (3 DOWNTO 0);
-    SW                  : IN  STD_LOGIC_VECTOR (3 DOWNTO 0);
-    LED                 : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
-    DISP_SEG            : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
-    DISP_DIG            : OUT STD_LOGIC_VECTOR (4 DOWNTO 0)
+    CLK             : IN  STD_LOGIC;
+    BTN             : IN  STD_LOGIC_VECTOR (3 DOWNTO 0);
+    SW              : IN  STD_LOGIC_VECTOR (3 DOWNTO 0);
+    LED             : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
+    DISP_SEG        : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
+    DISP_DIG        : OUT STD_LOGIC_VECTOR (4 DOWNTO 0)
   );
 END ENTITY rp_top;
 ----------------------------------------------------------------------------------
@@ -21,15 +21,15 @@ ARCHITECTURE Structural OF rp_top IS
 
   COMPONENT seg_disp_driver
   PORT(
-    CLK                 : IN  STD_LOGIC;
-    DIG_1               : IN  STD_LOGIC_VECTOR (3 DOWNTO 0);
-    DIG_2               : IN  STD_LOGIC_VECTOR (3 DOWNTO 0);
-    DIG_3               : IN  STD_LOGIC_VECTOR (3 DOWNTO 0);
-    DIG_4               : IN  STD_LOGIC_VECTOR (3 DOWNTO 0);
-    DP                  : IN  STD_LOGIC_VECTOR (3 DOWNTO 0);        -- [DP4 DP3 DP2 DP1]
-    DOTS                : IN  STD_LOGIC_VECTOR (2 DOWNTO 0);        -- [L3 L2 L1]
-    DISP_SEG            : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
-    DISP_DIG            : OUT STD_LOGIC_VECTOR (4 DOWNTO 0)
+    CLK             : IN  STD_LOGIC;
+    DIG_1           : IN  STD_LOGIC_VECTOR (3 DOWNTO 0);
+    DIG_2           : IN  STD_LOGIC_VECTOR (3 DOWNTO 0);
+    DIG_3           : IN  STD_LOGIC_VECTOR (3 DOWNTO 0);
+    DIG_4           : IN  STD_LOGIC_VECTOR (3 DOWNTO 0);
+    DP              : IN  STD_LOGIC_VECTOR (3 DOWNTO 0);        -- [DP4 DP3 DP2 DP1]
+    DOTS            : IN  STD_LOGIC_VECTOR (2 DOWNTO 0);        -- [L3 L2 L1]
+    DISP_SEG        : OUT STD_LOGIC_VECTOR (7 DOWNTO 0);
+    DISP_DIG        : OUT STD_LOGIC_VECTOR (4 DOWNTO 0)
   );
   END COMPONENT seg_disp_driver;
   
@@ -94,7 +94,8 @@ ARCHITECTURE Structural OF rp_top IS
   SIGNAL cnt_enable     : STD_LOGIC;
   SIGNAL disp_enable    : STD_LOGIC;
   SIGNAL cnt_reset      : STD_LOGIC;
-  SIGNAL btn_debounced  : STD_LOGIC_VECTOR(3 DOWNTO 0);
+  SIGNAL btn_0_deb      : STD_LOGIC;
+  SIGNAL btn_3_deb      : STD_LOGIC;
   SIGNAL cnt_0          : STD_LOGIC_VECTOR(3 DOWNTO 0);
   SIGNAL cnt_1          : STD_LOGIC_VECTOR(3 DOWNTO 0);
   SIGNAL cnt_2          : STD_LOGIC_VECTOR(3 DOWNTO 0);
@@ -158,29 +159,7 @@ BEGIN
     CLK                 => CLK,
     CE                  => ce_100hz,
     BTN                 => btn(0),
-    BTN_EDGE_POS        => btn_debounced(0)
-  );
-  
-  btn_in_1 : btn_in
-  GENERIC MAP(
-    G_DEB_PERIOD        => G_DEB_PERIOD
-  )
-  PORT MAP(
-    CLK                 => CLK,
-    CE                  => ce_100hz,
-    BTN                 => btn(1),
-    BTN_EDGE_POS        => btn_debounced(1)
-  );
-  
-  btn_in_2 : btn_in
-  GENERIC MAP(
-    G_DEB_PERIOD        => G_DEB_PERIOD
-  )
-  PORT MAP(
-    CLK                 => CLK,
-    CE                  => ce_100hz,
-    BTN                 => btn(2),
-    BTN_EDGE_POS        => btn_debounced(2)
+    BTN_EDGE_POS        => btn_0_deb
   );
   
   btn_in_3 : btn_in
@@ -191,7 +170,7 @@ BEGIN
     CLK                 => CLK,
     CE                  => ce_100hz,
     BTN                 => btn(3),
-    BTN_EDGE_POS        => btn_debounced(3)
+    BTN_EDGE_POS        => btn_3_deb
   );
 
   --------------------------------------------------------------------------------
@@ -216,8 +195,8 @@ BEGIN
   stopwatch_fsm_i : stopwatch_fsm
   PORT MAP(
     CLK                 => clk,
-    BTN_S_S             => btn_debounced(0),
-    BTN_L_C             => btn_debounced(3),
+    BTN_S_S             => btn_3_deb,
+    BTN_L_C             => btn_0_deb,
     CNT_RESET           => cnt_reset,
     CNT_ENABLE          => cnt_enable,
     DISP_ENABLE         => disp_enable
@@ -227,11 +206,6 @@ BEGIN
   -- LED connection
 
   LED <= cnt_3 & cnt_2;
-  
-  buttons: PROCESS (CLK)
-  BEGIN
-    
-  END PROCESS;
 
 ----------------------------------------------------------------------------------
 END ARCHITECTURE Structural;

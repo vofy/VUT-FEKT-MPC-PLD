@@ -132,14 +132,14 @@ BEGIN
 
     -- Re-enable counter
     cnt_enable <= '1';
-    WAIT FOR C_CLK_PERIOD * 200;
+    WAIT FOR C_CLK_PERIOD * 100000;
 
     -- Reset
     cnt_reset <= '1';
     WAIT FOR C_CLK_PERIOD * 2;
     cnt_reset <= '0';
 
-    WAIT FOR C_CLK_PERIOD * 200;
+    WAIT FOR C_CLK_PERIOD * 20;
     
     ------------------------------------------------------------------------------
     -- end of simulation

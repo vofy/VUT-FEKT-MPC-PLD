@@ -20,7 +20,6 @@ END ENTITY btn_in;
 ----------------------------------------------------------------------------------
 ARCHITECTURE Structural OF btn_in IS
 ----------------------------------------------------------------------------------
-
   COMPONENT sync_reg
   PORT(
     CLK                 : IN    STD_LOGIC;
@@ -30,7 +29,6 @@ ARCHITECTURE Structural OF btn_in IS
   END COMPONENT sync_reg;
 
   --------------------------------------------------------------------------------
-
   COMPONENT debouncer
   GENERIC(
     G_DEB_PERIOD        : POSITIVE := 3
@@ -44,7 +42,6 @@ ARCHITECTURE Structural OF btn_in IS
   END COMPONENT debouncer;
 
   --------------------------------------------------------------------------------
-
   COMPONENT edge_detector
   PORT(
     CLK                 : IN    STD_LOGIC;
@@ -56,14 +53,12 @@ ARCHITECTURE Structural OF btn_in IS
   END COMPONENT edge_detector;
 
   --------------------------------------------------------------------------------
-
   SIGNAL btn_nm         : STD_LOGIC;
   SIGNAL btn_deb        : STD_LOGIC;
 
 ----------------------------------------------------------------------------------
 BEGIN
 ----------------------------------------------------------------------------------
-
   sync_reg_i : sync_reg
   PORT MAP(
     CLK             => CLK,
@@ -72,7 +67,6 @@ BEGIN
   );
 
   --------------------------------------------------------------------------------
-
   debouncer_i : debouncer
   GENERIC MAP(
     G_DEB_PERIOD    => G_DEB_PERIOD
@@ -85,7 +79,6 @@ BEGIN
   );
 
   --------------------------------------------------------------------------------
-
   edge_detector_i : edge_detector
   PORT MAP(
     CLK             => CLK,
@@ -94,6 +87,8 @@ BEGIN
     EDGE_NEG        => BTN_EDGE_NEG,
     EDGE_ANY        => BTN_EDGE_ANY
   );
+  
+  BTN_DEBOUNCED <= btn_deb;
 
 ----------------------------------------------------------------------------------
 END ARCHITECTURE Structural;

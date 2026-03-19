@@ -10,10 +10,10 @@ ENTITY bcd_counter IS
     CNT_RESET           : IN    STD_LOGIC;      -- counter reset
     CNT_ENABLE          : IN    STD_LOGIC;      -- counter enable
     DISP_ENABLE         : IN    STD_LOGIC;      -- enable display update
-    CNT_0               : OUT   STD_LOGIC_VECTOR(3 DOWNTO 0);
-    CNT_1               : OUT   STD_LOGIC_VECTOR(3 DOWNTO 0);
-    CNT_2               : OUT   STD_LOGIC_VECTOR(3 DOWNTO 0);
-    CNT_3               : OUT   STD_LOGIC_VECTOR(3 DOWNTO 0)
+    CNT_0               : OUT   STD_LOGIC_VECTOR(3 DOWNTO 0) := "0000";
+    CNT_1               : OUT   STD_LOGIC_VECTOR(3 DOWNTO 0) := "0000";
+    CNT_2               : OUT   STD_LOGIC_VECTOR(3 DOWNTO 0) := "0000";
+    CNT_3               : OUT   STD_LOGIC_VECTOR(3 DOWNTO 0) := "0000"
   );
 END ENTITY bcd_counter;
 ----------------------------------------------------------------------------------
@@ -63,22 +63,22 @@ BEGIN
                     cnt_0_reg <= cnt_0_reg + 1;
                 END IF;
             END IF;
-            
-                report "CNT: " &
-                   integer'image(cnt_3_reg) &
-                   integer'image(cnt_2_reg) &
-                   integer'image(cnt_1_reg) &
-                   integer'image(cnt_0_reg);
         END IF;
     END PROCESS;
 
     --------------------------------------------------------------------------------
     -- Output (display) register
-
-    CNT_0 <= std_logic_vector(to_unsigned(cnt_0_reg, CNT_0'LENGTH));
-    CNT_1 <= std_logic_vector(to_unsigned(cnt_1_reg, CNT_1'LENGTH));
-    CNT_2 <= std_logic_vector(to_unsigned(cnt_2_reg, CNT_2'LENGTH));
-    CNT_3 <= std_logic_vector(to_unsigned(cnt_3_reg, CNT_3'LENGTH)); -- test "0101"
+    displays : PROCESS (CLK)
+    BEGIN
+        IF rising_edge(CLK) THEN
+            IF DISP_ENABLE = '1' THEN
+                CNT_0 <= std_logic_vector(to_unsigned(cnt_0_reg, CNT_0'LENGTH));
+                CNT_1 <= std_logic_vector(to_unsigned(cnt_1_reg, CNT_1'LENGTH));
+                CNT_2 <= std_logic_vector(to_unsigned(cnt_2_reg, CNT_2'LENGTH));
+                CNT_3 <= std_logic_vector(to_unsigned(cnt_3_reg, CNT_3'LENGTH)); -- test "0101"
+            END IF;
+        END IF;
+    END PROCESS;
 
 ----------------------------------------------------------------------------------
 END ARCHITECTURE Behavioral;

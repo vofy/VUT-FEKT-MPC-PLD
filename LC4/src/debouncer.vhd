@@ -18,7 +18,7 @@ END ENTITY debouncer;
 ARCHITECTURE Behavioral OF debouncer IS
 ----------------------------------------------------------------------------------
 
-SIGNAL sh_reg : STD_LOGIC_VECTOR(3 DOWNTO 0) := "0000";
+SIGNAL sh_reg : STD_LOGIC_VECTOR(G_DEB_PERIOD-1 DOWNTO 0);
 
 ----------------------------------------------------------------------------------
 BEGIN
@@ -27,10 +27,11 @@ BEGIN
 PROCESS (CLK) BEGIN
     IF rising_edge(CLK) THEN
         IF CE = '1' THEN
-            sh_reg <= sh_reg (2 DOWNTO 0) & BTN_IN;
-            IF sh_reg = "1111" THEN
+            sh_reg <= sh_reg (G_DEB_PERIOD-2 DOWNTO 0) & BTN_IN;
+            IF sh_reg = (sh_reg'RANGE => '1') THEN
                 BTN_OUT <= '1';
-            ELSE
+            END IF;
+            IF sh_reg = (sh_reg'RANGE => '0') THEN
                 BTN_OUT <= '0';
             END IF;
         END IF;
