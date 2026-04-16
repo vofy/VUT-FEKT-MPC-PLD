@@ -10,11 +10,13 @@
 # Allow src directories and their contents (including nested dirs)
 !*/src/*
 !*/src/sim/**
-
-# Allow IP core definitions inside /src/ip/<instance>/
 !*/src/ip/
 !*/src/ip/*/
 !*/src/ip/*/*.xci
+
+# Allow everything inside SOURCES folder
+!SOURCES/**
+!*/SOURCES/**
 
 # Make sure .gitignore itself is tracked
 !.gitignore
