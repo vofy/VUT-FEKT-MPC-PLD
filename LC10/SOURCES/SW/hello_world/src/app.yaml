@@ -1,0 +1,4 @@
+domain_path: C:\Users\243511\Projects\VUT-FEKT-MPC-PLD\LC10\SOURCES\SW\platform\export\platform\sw\standalone_microblaze_I
+app_src_dir: C:\Appz\AMDDesignTools\2025.2\Vitis\data\embeddedsw\lib\sw_apps\hello_world
+template: hello_world
+lang: c
