@@ -16,4 +16,4 @@ Collection of code written in excercise of Programmable Logic Devices (MPC-PLD) 
 | [LC08](https://github.com/vofy/VUT-FEKT-MPC-PLD/tree/main/LC08) | VIO and ILA IP cores                                           |
 | [LC09](https://github.com/vofy/VUT-FEKT-MPC-PLD/tree/main/LC09) | FIR IP and it's verification                                   |
 | [LC10](https://github.com/vofy/VUT-FEKT-MPC-PLD/tree/main/LC10) | Soft-IP procesor: MicroBlaze V (Vitis, UART, GPIO)             |
-| LC11 - Not present                                              | Zynq SoC                                                       |
+| [LC11](https://github.com/vofy/VUT-FEKT-MPC-PLD/tree/main/LC11) - Not present | Zynq SoC                                         |
